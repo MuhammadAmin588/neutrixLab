@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# Host this file at the site root. Sitemap URL depends on your live domain.
