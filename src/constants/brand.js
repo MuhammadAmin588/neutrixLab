@@ -1,12 +1,9 @@
-const contactEmail =
-  import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'info@neutrixlab.com'
-
 export const BRAND = {
   name: 'Neutrix Lab',
   shortName: 'Neutrix',
   tagline: 'Precision digital engineering for ambitious brands.',
-  email: contactEmail,
-  emailHref: `mailto:${contactEmail}`,
+  email: 'info@neutrixlab.com',
+  emailHref: 'mailto:info@neutrixlab.com',
   hours: 'Mon–Fri, 9:00 AM – 6:00 PM',
   location: 'Remote worldwide',
   phones: [

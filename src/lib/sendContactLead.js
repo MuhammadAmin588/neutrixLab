@@ -1,6 +1,5 @@
 const ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY?.trim() || ''
-const CONTACT_INBOX =
-  import.meta.env.VITE_CONTACT_EMAIL?.trim() || 'info@neutrixlab.com'
+const CONTACT_INBOX = 'info@neutrixlab.com'
 
 /**
  * Sends a contact-form lead via Web3Forms (no visitor activation needed).

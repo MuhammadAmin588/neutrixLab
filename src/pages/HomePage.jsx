@@ -281,10 +281,10 @@ export default function HomePage() {
               <p className="hero-enter font-label-caps text-label-caps text-primary-container tracking-[0.22em] mb-md">
                 NEUTRIX LAB
               </p>
-              <h1 className="hero-enter hero-enter-delay-1 font-display-lg text-[36px] sm:text-[48px] md:text-[56px] xl:text-[64px] leading-[1.04] tracking-[-0.035em] text-on-surface mb-lg">
-                <span className="block">
+              <h1 className="hero-enter hero-enter-delay-1 home-hero-title font-display-lg text-on-surface mb-lg">
+                <span className="home-hero-title-line">
                   We craft{' '}
-                  <span className="relative inline-block align-baseline min-w-[11ch]">
+                  <span className="home-hero-title-word">
                     <span
                       key={HERO_ROTATING[wordIndex]}
                       className="hero-rotating-word"
@@ -293,7 +293,7 @@ export default function HomePage() {
                     </span>
                   </span>
                 </span>
-                <span className="block">that feel inevitable.</span>
+                <span className="home-hero-title-line">that feel inevitable.</span>
               </h1>
               <p className="hero-enter hero-enter-delay-2 font-body-lg text-body-lg text-on-surface-variant max-w-[520px] mb-xl">
                 Premium websites, brands, and products engineered to look elite - and convert like a

@@ -27,7 +27,7 @@ export const REVIEWS = [
   {
     id: 1,
     name: 'Aykut Sadi',
-    role: 'COE, ASSET for Schools',
+    role: 'CEO, ASSET for Schools',
     category: 'web',
     rating: 5,
     quote:

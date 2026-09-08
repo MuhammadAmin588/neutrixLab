@@ -82,14 +82,18 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-[520px] flex items-center px-margin-desktop overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <img src={CONTACT_IMAGES.office} alt="" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-background/70 light:bg-background/88" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent light:via-background/80" />
-          <div className="absolute bottom-0 right-0 w-[520px] h-[520px] bg-secondary-container/15 rounded-full blur-[140px]" />
+      <section className="contact-hero relative min-h-[520px] flex items-center px-margin-desktop overflow-hidden">
+        <div className="contact-hero-media absolute inset-0 pointer-events-none">
+          <img
+            src={CONTACT_IMAGES.office}
+            alt=""
+            className="contact-hero-photo absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="contact-hero-veil absolute inset-0" />
+          <div className="contact-hero-fade absolute inset-0" />
+          <div className="contact-hero-glow absolute bottom-0 right-0 w-[520px] h-[520px] rounded-full blur-[140px]" />
         </div>
-        <div className="relative z-10 max-w-[1440px] mx-auto w-full py-xxl">
+        <div className="contact-hero-copy relative z-10 max-w-[1440px] mx-auto w-full py-xxl">
           <p className="hero-enter font-label-caps text-label-caps text-primary-container mb-md tracking-[0.18em]">
             LET&apos;S BUILD SOMETHING EXCEPTIONAL
           </p>
