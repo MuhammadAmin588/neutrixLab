@@ -26,6 +26,7 @@ export async function prerender(data) {
 
   return {
     html,
+    links: new Set(),
     head: {
       lang: 'en',
       title: seo.title,
