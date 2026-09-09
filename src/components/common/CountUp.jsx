@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import useInView from '../../hooks/useInView'
 
 export default function CountUp({ end, suffix = '', duration = 1600, className = '' }) {
-  const [ref, isInView] = useInView(0.4)
+  const [ref, isInView] = useInView(0.2)
   const [value, setValue] = useState(0)
   const started = useRef(false)
 

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import CountUp from '../components/common/CountUp'
 import Icon from '../components/common/Icon'
 import Reveal from '../components/common/Reveal'
 import { ROUTES } from '../constants/navigation'
@@ -77,6 +76,10 @@ function FeaturedChapter({ item, index }) {
               </a>
             ),
           )}
+          <Link to={`${ROUTES.work}/${item.id}`} className="pfolio-text-link">
+            Read case study
+            <Icon name="arrow_forward" className="text-[18px]" />
+          </Link>
           <Link to={ROUTES.contact} className="pfolio-text-link">
             Discuss a similar build
             <Icon name="arrow_forward" className="text-[18px]" />
@@ -91,11 +94,11 @@ function ArchiveCardBody({ project }) {
   const inner = (
     <>
       <div className={fitClass(project, 'pfolio-card-media')} style={fitStyle(project)}>
-        <img src={project.image} alt={project.alt} />
+        <img src={project.image} alt={project.alt || project.title} />
         <div className="pfolio-card-shade" />
         <span className="pfolio-card-view">
-          {project.href ? 'Visit' : 'View'}
-          <Icon name="arrow_outward" className="text-[16px]" />
+          Case study
+          <Icon name="arrow_forward" className="text-[16px]" />
         </span>
       </div>
       <div className="pfolio-card-meta">
@@ -110,12 +113,12 @@ function ArchiveCardBody({ project }) {
     </>
   )
 
-  if (!project.href) return inner
+  if (!project.href && !project.id) return inner
 
   return (
-    <a href={project.href} target="_blank" rel="noreferrer" className="pfolio-card-hit">
+    <Link to={`${ROUTES.work}/${project.id}`} className="pfolio-card-hit">
       {inner}
-    </a>
+    </Link>
   )
 }
 
@@ -175,8 +178,8 @@ export default function PortfolioPage() {
               a second look.
             </h1>
             <p className="hero-enter hero-enter-delay-2 font-body-lg text-body-lg text-on-surface-variant max-w-[480px] mb-xl">
-              Brands, products, and platforms crafted for trust, speed, and growth - curated like a
-              private exhibition.
+              Case studies in custom website design, ecommerce, mobile apps, branding, and web
+              portals — curated like a private exhibition.
             </p>
             <div className="hero-enter hero-enter-delay-3 flex flex-wrap gap-md mb-xl">
               <a href="#featured" className="pfolio-btn-solid">
@@ -211,7 +214,7 @@ export default function PortfolioPage() {
                   style={fitStyle(c)}
                   onClick={() => setSpotlight(i)}
                 >
-                  <img src={c.image} alt="" />
+                  <img src={c.image} alt={c.title} />
                   <span>{String(i + 1).padStart(2, '0')}</span>
                 </button>
               ))}
@@ -230,11 +233,7 @@ export default function PortfolioPage() {
           {METRICS.map((metric, index) => (
             <Reveal key={metric.label} delay={index * 80} className="pfolio-metric-item">
               <div className="pfolio-metric-value">
-                {metric.value.includes('+') || metric.value.includes('%') || metric.value.includes('$') ? (
-                  <span>{metric.value}</span>
-                ) : (
-                  <CountUp end={parseInt(metric.value, 10) || 0} suffix="" />
-                )}
+                <span>{metric.value}</span>
               </div>
               <div className="font-label-caps text-label-caps text-on-surface-variant tracking-[0.16em]">
                 {metric.label}
@@ -268,8 +267,7 @@ export default function PortfolioPage() {
               <h2 className="pfolio-section-title">Every piece, filterable.</h2>
             </div>
             <p className="text-on-surface-variant font-body-md max-w-[320px]">
-              {filteredProjects.length} project{filteredProjects.length === 1 ? '' : 's'} in view -
-              refine by industry and craft.
+              {`${filteredProjects.length} project${filteredProjects.length === 1 ? '' : 's'} in view - refine by industry and craft.`}
             </p>
           </div>
 
@@ -319,9 +317,21 @@ export default function PortfolioPage() {
           </div>
 
           {filteredProjects.length === 0 ? (
-            <p className="text-center text-on-surface-variant py-xxl">
-              No projects match these filters. Try another combination.
-            </p>
+            <div className="text-center py-xxl">
+              <p className="text-on-surface-variant mb-lg">
+                No projects match these filters. Try another combination.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIndustry('all')
+                  setType('all')
+                }}
+                className="pfolio-btn-ghost"
+              >
+                Reset filters
+              </button>
+            </div>
           ) : null}
 
           {hasMore ? (
@@ -354,6 +364,15 @@ export default function PortfolioPage() {
                     </p>
                     <h3 className="font-headline-sm text-[24px] text-on-surface mb-sm">{article.title}</h3>
                     <p className="font-body-md text-body-md text-on-surface-variant">{article.description}</p>
+                    {article.to ? (
+                      <Link
+                        to={article.to}
+                        className="inline-flex items-center gap-sm text-primary-container font-label-caps text-label-caps tracking-[0.14em] mt-md"
+                      >
+                        Read case study
+                        <Icon name="arrow_forward" className="text-[16px]" />
+                      </Link>
+                    ) : null}
                   </div>
                 </article>
               </Reveal>

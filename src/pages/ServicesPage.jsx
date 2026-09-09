@@ -145,7 +145,7 @@ export default function ServicesPage() {
             </div>
 
             <div className="shub-selector-preview" key={current.number}>
-              <img src={current.image} alt="" className="shub-preview-img" />
+              <img src={current.image} alt={current.title} className="shub-preview-img" />
               <div className="shub-preview-shade" />
               <div className="shub-preview-meta">
                 <p className="font-label-caps text-label-caps text-primary-container tracking-[0.16em] mb-sm">

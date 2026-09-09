@@ -45,7 +45,7 @@ export default function PricingPage() {
       {/* ── Cinematic hero ── */}
       <section className="cp-hero">
         <div className="cp-hero-media" aria-hidden="true">
-          <img src={heroImg} alt="" className="cp-hero-img" />
+          <img src={heroImg} alt="Neutrix Lab website and branding pricing" className="cp-hero-img" />
           <div className="cp-hero-veil" />
           <div className="cp-hero-grain" />
           <div className="cp-hero-orb cp-hero-orb-a" />
@@ -146,7 +146,7 @@ export default function PricingPage() {
             <Reveal key={plan.id} delay={i * 100} className="cp-plan-reveal">
               <article className={`cp-plan ${plan.popular ? 'is-featured' : ''}`}>
                 <div className="cp-plan-media">
-                  <img src={PLAN_MEDIA[i] || growthImg} alt="" />
+                  <img src={PLAN_MEDIA[i] || growthImg} alt={`${plan.name} package`} />
                   <div className="cp-plan-media-veil" />
                   <span className="cp-plan-tier">{plan.tier}</span>
                   {plan.popular ? <span className="cp-plan-badge">Recommended</span> : null}
@@ -287,7 +287,7 @@ export default function PricingPage() {
                 <Reveal key={combo.id} delay={i * 100}>
                   <article className="cp-combo">
                     <div className="cp-combo-bg" aria-hidden="true">
-                      <img src={i === 0 ? growthImg : enterpriseImg} alt="" />
+                      <img src={i === 0 ? growthImg : enterpriseImg} alt={combo.name} />
                       <div className="cp-combo-veil" />
                     </div>
                     <div className="cp-combo-content">
@@ -382,7 +382,7 @@ export default function PricingPage() {
       {/* ── Finale CTA ── */}
       <section className="cp-finale">
         <div className="cp-finale-media" aria-hidden="true">
-          <img src={addonImg} alt="" />
+          <img src={addonImg} alt="Custom website and branding scope planning" />
           <div className="cp-finale-veil" />
         </div>
         <div className="cp-finale-inner">

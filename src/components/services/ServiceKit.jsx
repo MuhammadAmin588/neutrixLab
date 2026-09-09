@@ -55,6 +55,7 @@ export function ServiceHero({
   highlight,
   description,
   image,
+  imageAlt = '',
   primaryLabel = 'Start Project',
   primaryTo = ROUTES.contact,
   secondaryLabel = 'View Work',
@@ -84,7 +85,7 @@ export function ServiceHero({
       style={{ '--spot-x': `${spot.x}%`, '--spot-y': `${spot.y}%` }}
     >
       <div className="absolute inset-0">
-        <img src={image} alt="" className="hero-ken-burns absolute inset-0 w-full h-full object-cover" />
+        <img src={image} alt={imageAlt} className="hero-ken-burns absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/88 to-background/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
         <div className="absolute inset-0 home-hero-spotlight pointer-events-none" />
@@ -556,11 +557,12 @@ export function ServiceFinale({
   title = 'Ready to build this right?',
   body = 'Book a free consult. We’ll map a clear plan and show you exactly how we’d ship.',
   image,
+  imageAlt = '',
 }) {
   return (
     <section className="home-finale relative min-h-[62vh] flex items-center overflow-hidden">
-      {image ? <img src={image} alt="" className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg" /> : null}
-      <div className="absolute inset-0 bg-background/82" />
+      {image ? <img src={image} alt={imageAlt} className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg" /> : null}
+      <div className="absolute inset-0 home-finale-veil" />
       <div className="absolute inset-0 home-finale-ring pointer-events-none" />
       <div className="relative z-10 w-full max-w-[860px] mx-auto px-margin-desktop text-center py-xxl">
         <p className="font-label-caps text-label-caps text-primary-container mb-md tracking-[0.24em]">{eyebrow}</p>

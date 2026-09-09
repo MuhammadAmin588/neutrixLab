@@ -39,6 +39,7 @@ export default function EcommercePage() {
         highlight={ecommerceHero.titleHighlight}
         description={ecommerceHero.description}
         image={ecommerceHero.image}
+        imageAlt={ecommerceHero.imageAlt}
         primaryLabel="Build My Store"
       />
       <ServiceTicker words={['CHECKOUT', 'CONVERSION', 'SHOPIFY', 'HEADLESS', 'CRO', 'GROWTH']} />
@@ -76,6 +77,7 @@ export default function EcommercePage() {
         title={ecommerceCta.title}
         body={ecommerceCta.description}
         image={ecommerceHero.image}
+        imageAlt={ecommerceHero.imageAlt}
       />
     </div>
   )

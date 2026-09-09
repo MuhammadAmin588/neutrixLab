@@ -28,6 +28,7 @@ export default function WebPortalsPage() {
         highlight="complex operations."
         description="Enterprise portals engineered for scale - dashboards, roles, workflows, and data that stays locked down."
         image={PORTAL_IMAGES.hero}
+        imageAlt="Enterprise web portal dashboards and operations"
         primaryLabel="Plan My Portal"
       />
       <ServiceTicker words={['ENTERPRISE', 'MEDICAL', 'ADMIN', 'ROLES', 'SECURITY', 'SCALE']} />
@@ -64,6 +65,7 @@ export default function WebPortalsPage() {
         title="Ready to modernize your operations?"
         body="We’ll map a portal architecture that fits your workflows - and ships secure."
         image={PORTAL_IMAGES.nexus}
+        imageAlt="Enterprise portal operations dashboard"
       />
     </div>
   )

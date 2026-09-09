@@ -8,13 +8,14 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 
 function getActiveKey(pathname) {
-  if (pathname.startsWith('/portfolio')) return 'portfolio'
+  if (pathname.startsWith('/portfolio') || pathname.startsWith('/work')) return 'portfolio'
   if (pathname.startsWith('/pricing')) return 'pricing'
   if (pathname.startsWith('/services')) return 'services'
   if (pathname.startsWith('/reviews')) return 'reviews'
   if (pathname.startsWith('/contact')) return 'contact'
   if (pathname.startsWith('/packages')) return 'combos'
-  return 'home'
+  if (pathname === '/') return 'home'
+  return ''
 }
 
 export default function Layout() {

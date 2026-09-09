@@ -27,6 +27,7 @@ export default function BrandingPage() {
         highlight="remember."
         description="High-performance identities engineered for authority, clarity, and long-term market dominance."
         image={BRANDING_IMAGES.hero}
+        imageAlt="Brand identity design and logo exploration"
         primaryLabel="Initiate Branding"
       />
       <ServiceTicker words={['IDENTITY', 'LOGO', 'VOICE', 'GUIDELINES', 'STRATEGY', 'SYSTEMS']} />
@@ -57,6 +58,7 @@ export default function BrandingPage() {
         title="Ready to look unforgettable?"
         body="Book a consult. We’ll map a brand system that feels premium - and works hard."
         image={BRANDING_IMAGES.guidelines}
+        imageAlt="Brand guidelines and identity system"
       />
     </div>
   )

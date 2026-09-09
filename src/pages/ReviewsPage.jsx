@@ -187,7 +187,7 @@ export default function ReviewsPage() {
                 className={`rev-thumb ${i === active ? 'is-on' : ''}`}
                 onClick={() => setActive(i)}
               >
-                <img src={review.image} alt="" />
+                <img src={review.image} alt={review.name} />
               </button>
             ))}
           </div>

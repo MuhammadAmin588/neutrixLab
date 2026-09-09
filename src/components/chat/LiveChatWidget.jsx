@@ -88,7 +88,7 @@ export default function LiveChatWidget() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-[80] flex flex-col items-end gap-3 pointer-events-none">
+    <div className="chat-dock fixed bottom-5 right-5 z-[80] flex flex-col items-end gap-3 pointer-events-none">
       {open && (
         <section
           className="pointer-events-auto w-[min(100vw-1.5rem,380px)] h-[min(72vh,560px)] flex flex-col rounded-xl border border-outline-variant/40 bg-surface-container-low/95 backdrop-blur-xl shadow-2xl overflow-hidden animate-[chat-pop_0.28s_ease-out]"

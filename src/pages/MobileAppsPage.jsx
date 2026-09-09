@@ -45,6 +45,7 @@ export default function MobileAppsPage() {
         highlight={mobileHero.titleHighlight}
         description={mobileHero.description}
         image={mobileHero.image}
+        imageAlt={mobileHero.imageAlt}
         primaryLabel="Build My App"
       />
       <ServiceTicker words={['iOS', 'ANDROID', 'FLUTTER', 'REACT NATIVE', 'UX', 'LAUNCH']} />
@@ -88,7 +89,7 @@ export default function MobileAppsPage() {
         metrics={mobileCaseStudy.metrics}
       />
       <ServiceFaq items={mobileFaq} title="Mobile FAQs" />
-      <ServiceFinale title={mobileCta.title} body={mobileCta.description} image={mobileHero.image} />
+      <ServiceFinale title={mobileCta.title} body={mobileCta.description} image={mobileHero.image} imageAlt={mobileHero.imageAlt} />
     </div>
   )
 }

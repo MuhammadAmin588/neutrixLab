@@ -31,7 +31,7 @@ export default function ComboPackagesPage() {
       {/* Hero */}
       <section className="relative min-h-[700px] flex items-center px-margin-desktop overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <img src={PACKAGES_IMAGES.hero} alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <img src={PACKAGES_IMAGES.hero} alt="Branding and website combo packages" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-background/88" />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/35" />
           <div className="absolute top-1/4 right-1/5 w-[520px] h-[520px] bg-primary-container/15 rounded-full blur-[140px] animate-pulse-glow" />

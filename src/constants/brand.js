@@ -27,4 +27,4 @@ export const BRAND = {
 export const BRAND_TITLE = (page) => (page ? `${page} | ${BRAND.name}` : BRAND.name)
 
 export const SITE_DESCRIPTION =
-  'Neutrix Lab builds branding, websites, e-commerce, mobile apps, and web portals for growing brands.'
+  'Neutrix Lab is a remote digital studio for custom website design, brand identity, ecommerce stores, mobile apps, and web portals — serving UK, US, and worldwide clients.'

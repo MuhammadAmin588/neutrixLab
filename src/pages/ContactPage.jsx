@@ -86,7 +86,7 @@ export default function ContactPage() {
         <div className="contact-hero-media absolute inset-0 pointer-events-none">
           <img
             src={CONTACT_IMAGES.office}
-            alt=""
+            alt="Neutrix Lab studio office"
             className="contact-hero-photo absolute inset-0 w-full h-full object-cover"
           />
           <div className="contact-hero-veil absolute inset-0" />

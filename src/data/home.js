@@ -154,6 +154,7 @@ export const SERVICES = [
     title: 'Branding',
     subtitle: 'Identity systems that feel inevitable',
     path: ROUTES.branding,
+    cta: 'Explore branding',
     image: brandingCard,
   },
   {
@@ -162,6 +163,7 @@ export const SERVICES = [
     title: 'Web Design',
     subtitle: 'Interfaces that convert on first glance',
     path: ROUTES.webDesign,
+    cta: 'Explore web design',
     image: webDesignCard,
   },
   {
@@ -170,6 +172,7 @@ export const SERVICES = [
     title: 'Web Dev',
     subtitle: 'Fast, scalable engineering',
     path: ROUTES.webDesign,
+    cta: 'Explore development',
     image: webDevCard,
   },
   {
@@ -178,6 +181,7 @@ export const SERVICES = [
     title: 'E-Commerce',
     subtitle: 'Stores built to sell harder',
     path: ROUTES.ecommerce,
+    cta: 'Explore ecommerce',
     image: ecommerceCard,
   },
   {
@@ -186,6 +190,7 @@ export const SERVICES = [
     title: 'Mobile Apps',
     subtitle: 'Products people keep opening',
     path: ROUTES.mobileApps,
+    cta: 'Explore apps',
     image: mobileCard,
   },
   {
@@ -194,6 +199,7 @@ export const SERVICES = [
     title: 'Marketing',
     subtitle: 'Campaigns with clear ROI',
     path: ROUTES.comboPackages,
+    cta: 'View packages',
     image: marketingCard,
   },
   {
@@ -202,6 +208,7 @@ export const SERVICES = [
     title: 'SEO',
     subtitle: 'Visibility that compounds',
     path: ROUTES.comboPackages,
+    cta: 'View packages',
     image: seoCard,
   },
   {
@@ -210,6 +217,7 @@ export const SERVICES = [
     title: 'Motion',
     subtitle: 'Animation with purpose',
     path: ROUTES.portfolio,
+    cta: 'View the work',
     image: motionCard,
   },
 ]
@@ -249,7 +257,7 @@ export const FEATURED_WORK = [
     image: featBloomKidz,
     imageFit: 'contain',
     imageBg: '#34A6B1',
-    path: ROUTES.portfolio,
+    path: `${ROUTES.work}/bloom-kidz`,
     size: 'large',
   },
   {
@@ -259,7 +267,7 @@ export const FEATURED_WORK = [
     image: featDokWallet,
     imageFit: 'contain',
     imageBg: '#222222',
-    path: ROUTES.portfolio,
+    path: `${ROUTES.work}/dok-wallet`,
     size: 'tall',
   },
   {
@@ -269,7 +277,7 @@ export const FEATURED_WORK = [
     image: featClinia,
     imageFit: 'contain',
     imageBg: '#1F2D36',
-    path: ROUTES.portfolio,
+    path: `${ROUTES.work}/clinia`,
     size: 'wide',
   },
 ]

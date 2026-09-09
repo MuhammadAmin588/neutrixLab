@@ -9,6 +9,7 @@ const ThemeContext = createContext({
 })
 
 export function applyThemeClass(theme) {
+  if (typeof document === 'undefined') return
   const root = document.documentElement
   const light = theme === 'light'
   root.classList.toggle('dark', !light)

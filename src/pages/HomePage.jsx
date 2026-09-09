@@ -113,7 +113,7 @@ function HeroVideo({ poster }) {
 
   return (
     <div className="home-hero-video-wrap">
-      <img src={poster} alt="" className="home-hero-video-poster" />
+      <img src={poster} alt="Neutrix Lab custom website and product design studio" className="home-hero-video-poster" />
       <video
         ref={bindVideo}
         className="home-hero-video"
@@ -296,8 +296,8 @@ export default function HomePage() {
                 <span className="home-hero-title-line">that feel inevitable.</span>
               </h1>
               <p className="hero-enter hero-enter-delay-2 font-body-lg text-body-lg text-on-surface-variant max-w-[520px] mb-xl">
-                Premium websites, brands, and products engineered to look elite - and convert like a
-                growth machine.
+                Custom website design, brand identity, ecommerce stores, mobile apps, and web
+                portals — remote for UK, US, and worldwide.
               </p>
               <div className="hero-enter hero-enter-delay-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-md mb-xl">
                 <MagLink
@@ -437,8 +437,8 @@ export default function HomePage() {
               className={`home-film-card group${service.image ? ' has-media' : ''}`}
             >
               {service.image ? (
-                <div className="home-film-media" aria-hidden="true">
-                  <img src={service.image} alt="" />
+                <div className="home-film-media">
+                  <img src={service.image} alt={`${service.title} by Neutrix Lab`} />
                 </div>
               ) : null}
               <div className="home-film-body">
@@ -448,9 +448,9 @@ export default function HomePage() {
                   {service.title}
                 </h3>
                 <p className="font-body-sm text-body-sm text-on-surface-variant mb-xl">{service.subtitle}</p>
-                <span className="inline-flex items-center gap-sm text-primary-container font-label-caps text-label-caps tracking-[0.14em]">
-                  OPEN
-                  <Icon name="arrow_forward" className="text-[16px] transition-transform group-hover:translate-x-1" />
+                <span className="home-film-cta">
+                  {service.cta}
+                  <Icon name="arrow_forward" className="home-film-cta-icon" />
                 </span>
               </div>
             </Link>
@@ -463,7 +463,7 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-xxl items-start">
           <div className="home-split-sticky">
             <div className="home-split-media">
-              <img src={HOME_IMAGES.agencyTeam} alt="NEUTRIX team crafting product UI" />
+              <img src={HOME_IMAGES.agencyTeam} alt="Neutrix Lab designers crafting product UI" />
               <div className="home-split-media-glow" />
               <div className="home-split-badge">
                 <p className="font-label-caps text-label-caps text-primary-container mb-xs">SIGNAL</p>
@@ -675,7 +675,7 @@ export default function HomePage() {
       <section className="home-finale relative min-h-[70vh] flex items-center overflow-hidden">
         <img
           src={HOME_IMAGES.processStrategy}
-          alt=""
+          alt="Neutrix Lab strategy and product planning session"
           className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg"
         />
           <div className="absolute inset-0 home-finale-veil" />

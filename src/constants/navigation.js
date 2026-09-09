@@ -11,6 +11,8 @@ export const ROUTES = {
   reviews: '/reviews',
   contact: '/contact',
   comboPackages: '/packages',
+  blog: '/blog',
+  work: '/work',
   privacy: '/privacy',
   terms: '/terms',
 }
@@ -41,10 +43,12 @@ export const FOOTER_SERVICES = [
 ]
 
 export const FOOTER_EXPLORE = [
+  { label: 'Services', path: ROUTES.services },
   { label: 'Portfolio', path: ROUTES.portfolio },
   { label: 'Pricing', path: ROUTES.pricing },
   { label: 'Packages', path: ROUTES.comboPackages },
   { label: 'Reviews', path: ROUTES.reviews },
+  { label: 'Insights', path: ROUTES.blog },
   { label: 'Contact', path: ROUTES.contact },
 ]
 

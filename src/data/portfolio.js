@@ -26,7 +26,6 @@ export const INDUSTRIES = [
   { id: 'lifestyle', label: 'Lifestyle & Services' },
   { id: 'mobility', label: 'Mobility & Transport' },
   { id: 'ecommerce', label: 'E-Commerce' },
-  { id: 'logistics', label: 'Logistics' },
   { id: 'saas', label: 'SaaS & Enterprise' },
 ]
 
@@ -35,8 +34,6 @@ export const TYPE_FILTERS = [
   { id: 'web-app', label: 'Web App' },
   { id: 'ecommerce', label: 'E-Commerce' },
   { id: 'mobile-app', label: 'Mobile App' },
-  { id: 'branding', label: 'Branding' },
-  { id: 'marketing', label: 'Marketing' },
 ]
 
 export const METRICS = [
@@ -396,36 +393,42 @@ export const ARTICLES = [
     title: 'How Bloom Kidz replaced a patchwork of school tools with one OS',
     description:
       'Role-based dashboards, attendance, finance, and parent comms — designed so nurseries can run the day without juggling five apps.',
+    to: '/work/bloom-kidz',
   },
   {
     category: 'Product Design',
     title: "Designing Clinia's health navigation for trust at scale",
     description:
       'Serif authority, calm color, and developer-ready docs — so health orgs can embed personalized care discovery without looking like a generic SaaS template.',
+    to: '/work/clinia',
   },
   {
     category: 'Mobile Product',
     title: 'Shipping DoK Wallet as one React Native app on two stores',
     description:
       'A secure sign-in, seed-phrase recovery, and a single assets dashboard — so users can hold Bitcoin, Ethereum, and hundreds of tokens without hopping wallets.',
+    to: '/work/dok-wallet',
   },
   {
     category: 'Marketplace',
     title: 'Building SAMU for Abuja, not a generic food-app template',
     description:
       'Real-time tracking, local cuisine, groceries, and neighborhood coverage — a delivery product that matches how the city actually eats.',
+    to: '/work/samu',
   },
   {
     category: 'Mobility',
     title: 'Why Zexal needed a rider app and an ops dashboard',
     description:
       'Hire a driver or a supercar on mobile — while operators manage fleet, bookings, trips, and earnings from one dark admin console.',
+    to: '/work/zexal',
   },
   {
     category: 'Health Product',
     title: 'IIFYM: macros in the app, operations in the admin',
     description:
       'Personalized protein, fat, and carb goals with meal recommendations — plus accounts, listings, subscriptions, and order tracking for the team behind it.',
+    to: '/work/iifym',
   },
 ]
 

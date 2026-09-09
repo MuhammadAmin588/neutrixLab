@@ -38,6 +38,7 @@ export default function WebDesignPage() {
         highlight="feel elite."
         description={HERO.description}
         image={HERO.image}
+        imageAlt={HERO.imageAlt}
         primaryLabel="Initiate Project"
       />
       <ServiceTicker words={['UI/UX', 'PERFORMANCE', 'SEO', 'CMS', 'LANDING', 'CORPORATE']} />
@@ -79,6 +80,7 @@ export default function WebDesignPage() {
         title="Ready to rebuild the first impression?"
         body="We’ll map a site that looks premium, loads fast, and converts like a sales asset."
         image={HERO.image}
+        imageAlt={HERO.imageAlt}
       />
     </div>
   )
