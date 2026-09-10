@@ -1,5 +1,6 @@
-const PROPERTY_ID = import.meta.env.VITE_TAWK_PROPERTY_ID?.trim() || ''
-const WIDGET_ID = import.meta.env.VITE_TAWK_WIDGET_ID?.trim() || 'default'
+// Public widget IDs from tawk.to embed (not secrets — they appear in page source).
+const PROPERTY_ID = '6aa2ad3cbc444e3446a90359'
+const WIDGET_ID = '1k25n9d9h'
 
 export function isTawkConfigured() {
   return Boolean(PROPERTY_ID)
