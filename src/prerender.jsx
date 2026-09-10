@@ -2,8 +2,10 @@ import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import { AppRoutes } from './App'
 import { ThemeProvider } from './context/ThemeContext'
-import { getSeoForPath, isIndexablePath, SITE_ORIGIN } from './constants/seo'
+import { getSeoForPath, isIndexablePath, PUBLIC_PATHS, SITE_ORIGIN } from './constants/seo'
 import { buildSeoGraph } from './lib/seoSchema'
+
+export { PUBLIC_PATHS }
 
 export async function prerender(data) {
   const url = data?.url || '/'
