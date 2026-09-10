@@ -1,13 +1,23 @@
-import { useEffect } from 'react'
-import { getTawkIds, isTawkConfigured } from '../../lib/tawk'
+import { useEffect, useRef } from 'react'
+import { useLiveChat } from '../../context/LiveChatContext'
+import { getTawkIds, hideTawkWidget, isTawkConfigured, showTawkWidget } from '../../lib/tawk'
 
 const SCRIPT_ID = 'tawk-to-script'
 
 /**
  * Loads tawk.to in the background for human handoff.
- * The default bubble stays hidden - AI chat is primary; we show tawk on demand.
+ * When an agent messages, AI steps aside and this widget is shown.
  */
 export default function TawkToWidget() {
+  const { humanTakeover, startHumanTakeover, endHumanTakeover } = useLiveChat()
+  const takeoverRef = useRef(humanTakeover)
+  const startRef = useRef(startHumanTakeover)
+  const endRef = useRef(endHumanTakeover)
+
+  takeoverRef.current = humanTakeover
+  startRef.current = startHumanTakeover
+  endRef.current = endHumanTakeover
+
   useEffect(() => {
     if (!isTawkConfigured()) return undefined
     if (document.getElementById(SCRIPT_ID)) return undefined
@@ -17,9 +27,14 @@ export default function TawkToWidget() {
     window.Tawk_API = window.Tawk_API || {}
     window.Tawk_LoadStart = new Date()
 
+    function revealHumanChat() {
+      startRef.current()
+      showTawkWidget()
+    }
+
     window.Tawk_API.onLoad = function onTawkLoad() {
       try {
-        window.Tawk_API.hideWidget?.()
+        if (!takeoverRef.current) hideTawkWidget()
         window.Tawk_API.addTags?.(['website', 'neutrix-lab'])
         window.Tawk_API.setAttributes?.(
           {
@@ -33,12 +48,26 @@ export default function TawkToWidget() {
       }
     }
 
+    window.Tawk_API.onChatMessageAgent = function onChatMessageAgent() {
+      revealHumanChat()
+    }
+
+    window.Tawk_API.onChatStarted = function onChatStarted() {
+      revealHumanChat()
+    }
+
+    window.Tawk_API.onUnreadCountChanged = function onUnreadCountChanged(count) {
+      if (count > 0) revealHumanChat()
+    }
+
+    window.Tawk_API.onChatEnded = function onChatEnded() {
+      endRef.current()
+      hideTawkWidget()
+    }
+
     window.Tawk_API.onChatMinimized = function onTawkMinimized() {
-      try {
-        window.Tawk_API.hideWidget?.()
-      } catch {
-        // ignore
-      }
+      if (takeoverRef.current) return
+      hideTawkWidget()
     }
 
     const script = document.createElement('script')

@@ -9,10 +9,10 @@ function uid(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
 
-function connectHuman(closeChat) {
+function connectHuman(startHumanTakeover) {
   const opened = openTawkHumanChat()
   if (opened) {
-    window.setTimeout(() => closeChat(), 600)
+    startHumanTakeover()
     return {
       text: 'Connecting you to a human agent now. Our live chat is opening - a NEUTRIX team member will reply there.',
       quickReplies: [],
@@ -28,7 +28,7 @@ function connectHuman(closeChat) {
 }
 
 export default function LiveChatWidget() {
-  const { open, closeChat, toggleChat } = useLiveChat()
+  const { open, closeChat, toggleChat, humanTakeover, startHumanTakeover } = useLiveChat()
   const [messages, setMessages] = useState(() => [getWelcomeMessage()])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -48,7 +48,7 @@ export default function LiveChatWidget() {
 
   async function sendText(raw) {
     const text = raw.trim()
-    if (!text || typing) return
+    if (!text || typing || humanTakeover) return
 
     const userMsg = { id: uid('user'), role: 'user', text }
     setMessages((prev) => [...prev, userMsg])
@@ -57,7 +57,7 @@ export default function LiveChatWidget() {
 
     try {
       const reply = await generateAiReply(text, [...messages, userMsg])
-      const payload = reply.action === 'handoff_human' ? connectHuman(closeChat) : reply
+      const payload = reply.action === 'handoff_human' ? connectHuman(startHumanTakeover) : reply
 
       setMessages((prev) => [
         ...prev,
@@ -86,6 +86,8 @@ export default function LiveChatWidget() {
     e.preventDefault()
     sendText(input)
   }
+
+  if (humanTakeover) return null
 
   return (
     <div className="chat-dock fixed bottom-5 right-5 z-[80] flex flex-col items-end gap-3 pointer-events-none">

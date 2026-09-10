@@ -4,20 +4,46 @@ const LiveChatContext = createContext(null)
 
 export function LiveChatProvider({ children }) {
   const [open, setOpen] = useState(false)
+  const [humanTakeover, setHumanTakeover] = useState(false)
 
-  const openChat = useCallback(() => setOpen(true), [])
   const closeChat = useCallback(() => setOpen(false), [])
-  const toggleChat = useCallback(() => setOpen((v) => !v), [])
+  const startHumanTakeover = useCallback(() => {
+    setHumanTakeover(true)
+    setOpen(false)
+  }, [])
+  const endHumanTakeover = useCallback(() => {
+    setHumanTakeover(false)
+    setOpen(false)
+  }, [])
+  const openChat = useCallback(() => {
+    if (humanTakeover) return
+    setOpen(true)
+  }, [humanTakeover])
+  const toggleChat = useCallback(() => {
+    if (humanTakeover) return
+    setOpen((v) => !v)
+  }, [humanTakeover])
 
   useEffect(() => {
-    const onOpen = () => setOpen(true)
+    const onOpen = () => {
+      if (humanTakeover) return
+      setOpen(true)
+    }
     window.addEventListener('NEUTRIX:open-live-chat', onOpen)
     return () => window.removeEventListener('NEUTRIX:open-live-chat', onOpen)
-  }, [])
+  }, [humanTakeover])
 
   const value = useMemo(
-    () => ({ open, openChat, closeChat, toggleChat }),
-    [open, openChat, closeChat, toggleChat],
+    () => ({
+      open,
+      humanTakeover,
+      openChat,
+      closeChat,
+      toggleChat,
+      startHumanTakeover,
+      endHumanTakeover,
+    }),
+    [open, humanTakeover, openChat, closeChat, toggleChat, startHumanTakeover, endHumanTakeover],
   )
 
   return <LiveChatContext.Provider value={value}>{children}</LiveChatContext.Provider>
