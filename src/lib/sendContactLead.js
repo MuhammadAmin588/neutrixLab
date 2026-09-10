@@ -7,7 +7,7 @@ const CONTACT_INBOX = 'kingabdulmalik159@gmail.com'
 export async function sendContactLead(form) {
   const payload = {
     name: form.name.trim(),
-    email: form.email.trim(),
+    visitor_email: form.email.trim(),
     _replyto: form.email.trim(),
     _subject: `New interested lead: ${form.name.trim()} - Neutrix Lab`,
     _template: 'table',

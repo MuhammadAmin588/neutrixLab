@@ -171,6 +171,7 @@ export default function LiveChatWidget() {
 
           <form
             onSubmit={handleSubmit}
+            data-netlify="false"
             className="border-t border-outline-variant/30 p-md bg-surface-container flex items-center gap-sm"
           >
             <input

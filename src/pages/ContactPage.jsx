@@ -59,12 +59,12 @@ export default function ContactPage() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault()
     const next = validate()
     setErrors(next)
     setSubmitError('')
     if (Object.keys(next).length) return
 
+    e?.preventDefault?.()
     const nameSnapshot = form.name.trim()
     setSubmitting(true)
     try {
@@ -162,7 +162,14 @@ export default function ContactPage() {
                   <p className="font-body-md text-body-md text-on-surface-variant mb-xl">
                     Share a few details and we&apos;ll craft a tailored proposal.
                   </p>
-                  <form onSubmit={handleSubmit} className="space-y-lg" noValidate>
+                  <div
+                    className="space-y-lg"
+                    onKeyDown={(e) => {
+                      if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return
+                      e.preventDefault()
+                      handleSubmit()
+                    }}
+                  >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
                       <Field
                         label="Full name"
@@ -250,13 +257,14 @@ export default function ContactPage() {
                       </p>
                     )}
                     <button
-                      type="submit"
+                      type="button"
                       disabled={submitting}
+                      onClick={() => handleSubmit()}
                       className="w-full md:w-auto bg-primary-container text-on-primary-fixed font-headline-sm px-xxl py-lg rounded-lg cyber-glow transition-transform hover:scale-[1.02] disabled:opacity-70"
                     >
                       {submitting ? 'Sending...' : 'Send Message'}
                     </button>
-                  </form>
+                  </div>
                 </>
               )}
             </div>
