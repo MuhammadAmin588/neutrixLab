@@ -1,6 +1,6 @@
 // Public widget IDs from tawk.to embed (not secrets — they appear in page source).
-const PROPERTY_ID = '6aa2ad3cbc444e3446a90359'
-const WIDGET_ID = '1k25n9d9h'
+const PROPERTY_ID = '6aa17370bc444e3446a8fa57'
+const WIDGET_ID = '1k23alsiu'
 
 export function isTawkConfigured() {
   return Boolean(PROPERTY_ID)
