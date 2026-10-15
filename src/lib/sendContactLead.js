@@ -1,10 +1,11 @@
 const CONTACT_INBOX = 'kingabdulmalik159@gmail.com'
 
 /**
- * Posts to a Netlify function so FormSubmit never asks the visitor to activate.
+ * Posts to a Netlify function. The function uses the Web3Forms key at runtime
+ * so a Netlify env change takes effect without rebuilding the frontend.
  */
 export async function sendContactLead(form) {
-  const response = await fetch('/.netlify/functions/contact', {
+  const response = await fetch('/api/contact', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

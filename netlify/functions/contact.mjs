@@ -14,6 +14,10 @@ function json(statusCode, body) {
   }
 }
 
+function web3Key() {
+  return String(process.env.WEB3FORMS_ACCESS_KEY || process.env.VITE_WEB3FORMS_ACCESS_KEY || '').trim()
+}
+
 export async function handler(event) {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: corsHeaders, body: '' }
@@ -39,13 +43,21 @@ export async function handler(event) {
     return json(400, { success: false, message: 'Please complete the required fields.' })
   }
 
+  const accessKey = web3Key()
+  if (!accessKey) {
+    return json(500, {
+      success: false,
+      message: 'Contact form is not configured. Add WEB3FORMS_ACCESS_KEY in Netlify.',
+    })
+  }
+
   const payload = {
+    access_key: accessKey,
+    subject: `New interested lead: ${name} - Neutrix Lab`,
+    from_name: 'Neutrix Lab',
+    replyto: email,
     name,
-    visitor_email: email,
-    _replyto: email,
-    _subject: `New interested lead: ${name} - Neutrix Lab`,
-    _template: 'table',
-    _captcha: 'false',
+    email,
     phone,
     company: String(form.company || '').trim() || 'Not provided',
     budget: String(form.budget || '').trim() || 'Not provided',
@@ -54,13 +66,11 @@ export async function handler(event) {
     source: 'Neutrix Lab - Contact form',
   }
 
-  const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_INBOX}`, {
+  const response = await fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Origin: 'https://neutrixlab.com',
-      Referer: 'https://neutrixlab.com/contact',
     },
     body: JSON.stringify(payload),
   })
@@ -75,5 +85,5 @@ export async function handler(event) {
     })
   }
 
-  return json(200, { success: true })
+  return json(200, { success: true, inbox: CONTACT_INBOX })
 }
