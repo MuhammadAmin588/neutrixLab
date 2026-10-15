@@ -1,24 +1,44 @@
 const CONTACT_INBOX = 'kingabdulmalik159@gmail.com'
 
+async function getAccessKey() {
+  const response = await fetch('/api/contact', {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+  })
+  const data = await response.json().catch(() => ({}))
+  const accessKey = String(data.access_key || '').trim()
+  if (!accessKey) {
+    throw new Error(data.message || 'Contact form is not configured.')
+  }
+  return accessKey
+}
+
 /**
- * Posts to a Netlify function. The function uses the Web3Forms key at runtime
- * so a Netlify env change takes effect without rebuilding the frontend.
+ * Loads the Web3Forms key from Netlify at runtime, then submits from the
+ * browser. Web3Forms blocks serverless IPs, so the function cannot send mail.
  */
 export async function sendContactLead(form) {
-  const response = await fetch('/api/contact', {
+  const accessKey = await getAccessKey()
+
+  const response = await fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
     body: JSON.stringify({
+      access_key: accessKey,
+      subject: `New interested lead: ${form.name.trim()} - Neutrix Lab`,
+      from_name: 'Neutrix Lab',
+      replyto: form.email.trim(),
       name: form.name.trim(),
       email: form.email.trim(),
       phone: form.phone.trim(),
-      company: form.company.trim(),
-      budget: form.budget.trim(),
+      company: form.company.trim() || 'Not provided',
+      budget: form.budget.trim() || 'Not provided',
       reason: form.reason,
       message: form.message.trim(),
+      source: 'Neutrix Lab - Contact form',
     }),
   })
 
