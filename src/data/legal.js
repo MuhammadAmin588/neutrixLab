@@ -1,6 +1,6 @@
 import { BRAND } from '../constants/brand'
 
-const UPDATED = '7 September 2026'
+const UPDATED = '15 October 2026'
 const PHONE_LINE = BRAND.phones.map((p) => `${p.display} (${p.region})`).join(' and ')
 
 export const PRIVACY_DOC = {
@@ -39,7 +39,7 @@ export const PRIVACY_DOC = {
     {
       heading: 'Cookies and similar storage',
       paragraphs: [
-        'We use local storage for the theme you pick. Tawk.to may set its own cookies if you open human chat. This site does not currently run a separate marketing-analytics pixel from us. Third-party scripts can change; if we add analytics later, we will update this page.',
+        'We use local storage for the theme you pick. Tawk.to may set its own cookies if you open human chat. We also run the Meta (Facebook) Pixel to measure visits and contact-form leads for ads. Meta may set cookies or similar storage from that script.',
       ],
     },
     {

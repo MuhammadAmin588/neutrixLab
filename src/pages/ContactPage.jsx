@@ -5,6 +5,7 @@ import Reveal from '../components/common/Reveal'
 import { BRAND } from '../constants/brand'
 import { ROUTES } from '../constants/navigation'
 import { openLiveChat } from '../lib/liveChat'
+import { trackMetaLead } from '../lib/metaPixel'
 import { sendContactLead } from '../lib/sendContactLead'
 import {
   CONTACT_DETAILS,
@@ -69,6 +70,7 @@ export default function ContactPage() {
     setSubmitting(true)
     try {
       await sendContactLead(form)
+      trackMetaLead()
       setSubmittedName(nameSnapshot)
       setSubmitted(true)
       setForm(initialForm)

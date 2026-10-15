@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { LiveChatProvider } from '../../context/LiveChatContext'
+import { trackMetaPageView } from '../../lib/metaPixel'
 import LiveChatWidget from '../chat/LiveChatWidget'
 import TawkToWidget from '../chat/TawkToWidget'
 import Seo from '../common/Seo'
@@ -21,9 +22,15 @@ function getActiveKey(pathname) {
 export default function Layout() {
   const location = useLocation()
   const activeKey = getActiveKey(location.pathname)
+  const isFirstPageView = useRef(true)
 
   useEffect(() => {
     window.scrollTo(0, 0)
+    if (isFirstPageView.current) {
+      isFirstPageView.current = false
+      return
+    }
+    trackMetaPageView()
   }, [location.pathname])
 
   return (
