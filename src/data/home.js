@@ -1,6 +1,7 @@
 import { ROUTES } from '../constants/navigation'
 import heroWorkspace from '../assets/home/hero-workspace.jpg'
 import heroCinematic from '../assets/home/hero-cinematic.jpg'
+import heroCinematicSm from '../assets/home/hero-cinematic-800.jpg'
 import heroFeatured from '../assets/home/hero-featured.jpg'
 import agencyTeam from '../assets/home/agency-team.jpg'
 import processStrategy from '../assets/home/process-strategy.jpg'
@@ -285,6 +286,7 @@ export const FEATURED_WORK = [
 export const HOME_IMAGES = {
   heroWorkspace,
   heroCinematic,
+  heroCinematicSm,
   heroFeatured,
   agencyTeam,
   processStrategy,

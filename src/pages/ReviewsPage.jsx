@@ -79,7 +79,7 @@ export default function ReviewsPage() {
               “{FEATURED_QUOTE.quote}”
             </blockquote>
             <div className="rev-spotlight-person">
-              <img src={FEATURED_QUOTE.image} alt={FEATURED_QUOTE.name} />
+              <img src={FEATURED_QUOTE.image} alt={FEATURED_QUOTE.name} fetchPriority="high" decoding="async" />
               <div>
                 <p className="font-headline-sm text-on-surface">{FEATURED_QUOTE.name}</p>
                 <p className="font-body-sm text-body-sm text-on-surface-variant">{FEATURED_QUOTE.role}</p>
@@ -153,7 +153,7 @@ export default function ReviewsPage() {
           {current ? (
             <div key={`${filter}-${current.id}`} className="rev-stage-panel">
               <div className="rev-stage-media">
-                <img src={current.image} alt={current.name} />
+                <img src={current.image} alt={current.name} loading="lazy" decoding="async" />
                 <div className="rev-stage-media-shade" />
                 <div className="rev-stage-media-meta">
                   <p className="font-label-caps text-label-caps text-primary-container tracking-[0.16em] mb-xs">
@@ -187,7 +187,7 @@ export default function ReviewsPage() {
                 className={`rev-thumb ${i === active ? 'is-on' : ''}`}
                 onClick={() => setActive(i)}
               >
-                <img src={review.image} alt={review.name} />
+                <img src={review.image} alt={review.name} loading="lazy" decoding="async" />
               </button>
             ))}
           </div>
@@ -211,7 +211,7 @@ export default function ReviewsPage() {
                   </div>
                   <p className="rev-wall-quote">“{review.quote}”</p>
                   <div className="rev-wall-person">
-                    <img src={review.image} alt={review.name} />
+                    <img src={review.image} alt={review.name} loading="lazy" decoding="async" />
                     <div>
                       <p className="font-headline-sm text-[16px] text-on-surface">{review.name}</p>
                       <p className="font-body-sm text-body-sm text-on-surface-variant">{review.role}</p>

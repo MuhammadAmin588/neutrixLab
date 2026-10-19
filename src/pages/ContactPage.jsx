@@ -22,6 +22,7 @@ const initialForm = {
   budget: '',
   reason: CONTACT_REASONS[0],
   message: '',
+  botcheck: '',
 }
 
 export default function ContactPage() {
@@ -60,12 +61,11 @@ export default function ContactPage() {
   }
 
   async function handleSubmit(e) {
+    e?.preventDefault?.()
     const next = validate()
     setErrors(next)
     setSubmitError('')
     if (Object.keys(next).length) return
-
-    e?.preventDefault?.()
     const nameSnapshot = form.name.trim()
     setSubmitting(true)
     try {
@@ -90,6 +90,8 @@ export default function ContactPage() {
             src={CONTACT_IMAGES.office}
             alt="Neutrix Lab studio office"
             className="contact-hero-photo absolute inset-0 w-full h-full object-cover"
+            fetchPriority="high"
+            decoding="async"
           />
           <div className="contact-hero-veil absolute inset-0" />
           <div className="contact-hero-fade absolute inset-0" />
@@ -164,14 +166,17 @@ export default function ContactPage() {
                   <p className="font-body-md text-body-md text-on-surface-variant mb-xl">
                     Share a few details and we&apos;ll craft a tailored proposal.
                   </p>
-                  <div
-                    className="space-y-lg"
-                    onKeyDown={(e) => {
-                      if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return
-                      e.preventDefault()
-                      handleSubmit()
-                    }}
-                  >
+                  <form className="space-y-lg" onSubmit={handleSubmit} noValidate>
+                    <input
+                      type="text"
+                      name="botcheck"
+                      value={form.botcheck}
+                      onChange={(e) => updateField('botcheck', e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                    />
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
                       <Field
                         label="Full name"
@@ -259,14 +264,13 @@ export default function ContactPage() {
                       </p>
                     )}
                     <button
-                      type="button"
+                      type="submit"
                       disabled={submitting}
-                      onClick={() => handleSubmit()}
                       className="w-full md:w-auto bg-primary-container text-on-primary-fixed font-headline-sm px-xxl py-lg rounded-lg cyber-glow transition-transform hover:scale-[1.02] disabled:opacity-70"
                     >
                       {submitting ? 'Sending...' : 'Send Message'}
                     </button>
-                  </div>
+                  </form>
                 </>
               )}
             </div>
@@ -280,6 +284,8 @@ export default function ContactPage() {
                   src={CONTACT_IMAGES.team}
                   alt="Neutrix Lab team collaborating"
                   className="w-full h-[220px] object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="p-lg">
                   <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm">
@@ -330,6 +336,8 @@ export default function ContactPage() {
                   src={CONTACT_IMAGES.mapStyle}
                   alt="Studio location city view"
                   className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-background/55" />
                 <div className="absolute bottom-lg left-lg right-lg">

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://neutrixlab.com/sitemap.xml
+Sitemap: https://www.neutrixlab.com/sitemap.xml

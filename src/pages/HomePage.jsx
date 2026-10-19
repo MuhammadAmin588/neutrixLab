@@ -57,7 +57,7 @@ function MagLink({ to, className = '', children }) {
   )
 }
 
-function HeroVideo({ poster }) {
+function HeroVideo({ poster, posterSrcSet }) {
   const ref = useRef(null)
 
   const bindVideo = (node) => {
@@ -80,40 +80,78 @@ function HeroVideo({ poster }) {
     }
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const desktop = window.matchMedia('(min-width: 768px)')
+    let visible = true
 
-    const playSafe = () => {
+    const arm = () => {
       silence()
-      if (reduce.matches || document.hidden) {
+      if (!desktop.matches || reduce.matches || document.hidden || !visible) {
         video.pause()
+        if (video.getAttribute('src')) {
+          video.removeAttribute('src')
+          video.load()
+        }
         return
+      }
+      if (!video.getAttribute('src')) {
+        video.preload = 'none'
+        video.src = '/videos/hero-cinematic.mp4'
       }
       const play = video.play()
       if (play) play.catch(() => {})
     }
 
-    silence()
-    playSafe()
+    const onVisible = () => {
+      if (document.visibilityState === 'hidden') {
+        video.pause()
+        return
+      }
+      arm()
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      arm()
+    })
+    observer.observe(video.parentElement || video)
+
+    const start = () => {
+      if (document.readyState === 'complete') arm()
+      else window.addEventListener('load', arm, { once: true })
+    }
+    start()
+
     video.addEventListener('play', silence)
     video.addEventListener('playing', silence)
     video.addEventListener('canplay', silence)
     video.addEventListener('volumechange', silence)
-    video.addEventListener('loadeddata', playSafe)
-    reduce.addEventListener('change', playSafe)
-    document.addEventListener('visibilitychange', playSafe)
+    reduce.addEventListener('change', arm)
+    desktop.addEventListener('change', arm)
+    document.addEventListener('visibilitychange', onVisible)
     return () => {
+      observer.disconnect()
       video.removeEventListener('play', silence)
       video.removeEventListener('playing', silence)
       video.removeEventListener('canplay', silence)
       video.removeEventListener('volumechange', silence)
-      video.removeEventListener('loadeddata', playSafe)
-      reduce.removeEventListener('change', playSafe)
-      document.removeEventListener('visibilitychange', playSafe)
+      reduce.removeEventListener('change', arm)
+      desktop.removeEventListener('change', arm)
+      document.removeEventListener('visibilitychange', onVisible)
+      window.removeEventListener('load', arm)
     }
   }, [])
 
   return (
     <div className="home-hero-video-wrap">
-      <img src={poster} alt="Neutrix Lab custom website and product design studio" className="home-hero-video-poster" />
+      <img
+        src={poster}
+        srcSet={posterSrcSet}
+        sizes="100vw"
+        alt="Neutrix Lab custom website and product design studio"
+        className="home-hero-video-poster"
+        fetchPriority="high"
+        decoding="async"
+      />
       <video
         ref={bindVideo}
         className="home-hero-video"
@@ -123,9 +161,7 @@ function HeroVideo({ poster }) {
         playsInline
         disablePictureInPicture
         controls={false}
-        preload="auto"
-        poster={poster}
-        src="/videos/hero-cinematic.mp4"
+        preload="none"
         aria-hidden="true"
         onPlay={(e) => {
           e.currentTarget.muted = true
@@ -267,7 +303,10 @@ export default function HomePage() {
       {/* 1 - Cinematic hero */}
       <SpotlightHero>
         <div className="home-hero-media">
-          <HeroVideo poster={HOME_IMAGES.heroCinematic} />
+          <HeroVideo
+            poster={HOME_IMAGES.heroCinematic}
+            posterSrcSet={`${HOME_IMAGES.heroCinematicSm} 800w, ${HOME_IMAGES.heroCinematic} 1600w`}
+          />
           <div className="absolute inset-0 hero-wash-x" />
           <div className="absolute inset-0 hero-wash-y" />
           <div className="absolute inset-0 home-hero-vignette pointer-events-none" />
@@ -438,7 +477,7 @@ export default function HomePage() {
             >
               {service.image ? (
                 <div className="home-film-media">
-                  <img src={service.image} alt={`${service.title} by Neutrix Lab`} />
+                  <img src={service.image} alt={`${service.title} by Neutrix Lab`} loading="lazy" decoding="async" />
                 </div>
               ) : null}
               <div className="home-film-body">
@@ -463,7 +502,7 @@ export default function HomePage() {
         <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-xxl items-start">
           <div className="home-split-sticky">
             <div className="home-split-media">
-              <img src={HOME_IMAGES.agencyTeam} alt="Neutrix Lab designers crafting product UI" />
+              <img src={HOME_IMAGES.agencyTeam} alt="Neutrix Lab designers crafting product UI" loading="lazy" decoding="async" />
               <div className="home-split-media-glow" />
               <div className="home-split-badge">
                 <p className="font-label-caps text-label-caps text-primary-container mb-xs">SIGNAL</p>
@@ -574,7 +613,7 @@ export default function HomePage() {
                   : undefined
               }
             >
-              <img src={largeWork.image} alt={largeWork.title} />
+              <img src={largeWork.image} alt={largeWork.title} loading="lazy" decoding="async" />
               <div className="home-bento-shade" />
               <div className="home-bento-meta">
                 <span className="font-label-caps text-label-caps text-primary-container tracking-[0.16em]">
@@ -602,7 +641,7 @@ export default function HomePage() {
                       : undefined
                   }
                 >
-                  <img src={project.image} alt={project.title} />
+                  <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                   <div className="home-bento-shade" />
                   <div className="home-bento-meta">
                     <span className="font-label-caps text-label-caps text-primary-container tracking-[0.16em]">
@@ -677,6 +716,8 @@ export default function HomePage() {
           src={HOME_IMAGES.processStrategy}
           alt="Neutrix Lab strategy and product planning session"
           className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg"
+          loading="lazy"
+          decoding="async"
         />
           <div className="absolute inset-0 home-finale-veil" />
         <div className="absolute inset-0 home-finale-ring pointer-events-none" />

@@ -1,5 +1,5 @@
 import { BRAND, SITE_DESCRIPTION } from '../constants/brand'
-import { getBreadcrumbs, getSeoForPath, SITE_ORIGIN } from '../constants/seo'
+import { getBreadcrumbs, getSeoForPath, normalizePathname, SITE_ORIGIN, toCanonicalUrl } from '../constants/seo'
 import { getPostBySlug } from '../data/blog'
 import { getWorkSeo } from '../data/workMeta'
 
@@ -189,8 +189,7 @@ const SERVICE_BY_PATH = {
 }
 
 function absoluteUrl(origin, path) {
-  if (path === '/') return `${origin}/`
-  return `${origin}${path}`
+  return toCanonicalUrl(path, origin)
 }
 
 function toIsoDate(value) {
@@ -281,7 +280,7 @@ function reviewGraph(origin) {
     '@type': 'ProfessionalService',
     '@id': `${origin}/#reviews`,
     name: BRAND.name,
-    url: `${origin}/reviews`,
+    url: absoluteUrl(origin, '/reviews'),
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: avg.toFixed(1),
@@ -303,27 +302,28 @@ function reviewGraph(origin) {
 }
 
 export function buildSeoGraph(pathname, origin = SITE_ORIGIN) {
-  const graph = [organizationNode(origin), websiteNode(origin), breadcrumbNode(origin, pathname)]
+  const path = normalizePathname(pathname)
+  const graph = [organizationNode(origin), websiteNode(origin), breadcrumbNode(origin, path)]
 
   const webPage = {
     '@type': 'WebPage',
-    '@id': `${absoluteUrl(origin, pathname)}#webpage`,
-    url: absoluteUrl(origin, pathname),
+    '@id': `${absoluteUrl(origin, path)}#webpage`,
+    url: absoluteUrl(origin, path),
     name: BRAND.name,
     isPartOf: { '@id': `${origin}/#website` },
   }
   graph.push(webPage)
 
-  const faq = faqNode(pathname)
+  const faq = faqNode(path)
   if (faq) graph.push(faq)
 
-  const service = serviceNode(origin, pathname)
+  const service = serviceNode(origin, path)
   if (service) graph.push(service)
 
-  if (pathname === '/reviews') graph.push(reviewGraph(origin))
+  if (path === '/reviews') graph.push(reviewGraph(origin))
 
-  if (pathname.startsWith('/blog/')) {
-    const post = getPostBySlug(pathname.slice('/blog/'.length))
+  if (path.startsWith('/blog/')) {
+    const post = getPostBySlug(path.slice('/blog/'.length))
     if (post) {
       graph.push({
         '@type': 'Article',
@@ -332,26 +332,26 @@ export function buildSeoGraph(pathname, origin = SITE_ORIGIN) {
         datePublished: toIsoDate(post.date),
         author: { '@type': 'Organization', name: BRAND.name },
         publisher: { '@id': `${origin}/#organization` },
-        mainEntityOfPage: absoluteUrl(origin, pathname),
+        mainEntityOfPage: absoluteUrl(origin, path),
         image: `${origin}/og-share.png`,
       })
     }
   }
 
-  if (pathname.startsWith('/work/')) {
-    const work = getWorkSeo(pathname.slice('/work/'.length))
+  if (path.startsWith('/work/')) {
+    const work = getWorkSeo(path.slice('/work/'.length))
     if (work) {
       graph.push({
         '@type': 'CreativeWork',
         name: work.title,
         description: work.description,
-        url: absoluteUrl(origin, pathname),
+        url: absoluteUrl(origin, path),
         creator: { '@id': `${origin}/#organization` },
       })
     }
   }
 
-  const pageSeo = getSeoForPath(pathname)
+  const pageSeo = getSeoForPath(path)
   webPage.name = pageSeo.title
   webPage.description = pageSeo.description
 

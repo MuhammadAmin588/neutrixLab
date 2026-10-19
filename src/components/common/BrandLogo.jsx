@@ -57,7 +57,7 @@ export default function BrandLogo({ id, name, src, invertOnDark, className = '' 
         className={`brand-logo-mark ${invertOnDark ? 'invert-on-dark' : ''} ${className}`.trim()}
         aria-label={name}
       >
-        <img src={src} alt={name} />
+        <img src={src} alt={name} loading="lazy" decoding="async" />
       </div>
     )
   }

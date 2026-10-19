@@ -5,9 +5,39 @@ import { getWorkSeo, WORK_SEO } from '../data/workMeta'
 const DEFAULT_TITLE = `Custom Websites, Branding & Apps | ${BRAND.name}`
 const DEFAULT_DESCRIPTION = SITE_DESCRIPTION
 
-export const SITE_ORIGIN = String(
-  import.meta.env?.VITE_SITE_URL || 'https://neutrixlab.com',
-).replace(/\/$/, '')
+function resolveSiteOrigin(value) {
+  const origin = String(value || 'https://www.neutrixlab.com').replace(/\/$/, '')
+  if (
+    origin === 'https://neutrixlab.com' ||
+    origin === 'http://neutrixlab.com' ||
+    origin === 'http://www.neutrixlab.com'
+  ) {
+    return 'https://www.neutrixlab.com'
+  }
+  return origin
+}
+
+export const SITE_ORIGIN = resolveSiteOrigin(import.meta.env?.VITE_SITE_URL)
+
+/** `/pricing/` and `/pricing` are the same page. `/` stays `/`. */
+export function normalizePathname(pathname) {
+  const path = String(pathname || '/')
+    .split('?')[0]
+    .split('#')[0] || '/'
+  if (path === '/') return '/'
+  const stripped = path.replace(/\/+$/, '')
+  return stripped || '/'
+}
+
+/** Public path that already returns HTTP 200 on Netlify (directory index). */
+export function toCanonicalPath(pathname) {
+  const normalized = normalizePathname(pathname)
+  return normalized === '/' ? '/' : `${normalized}/`
+}
+
+export function toCanonicalUrl(pathname, origin = SITE_ORIGIN) {
+  return `${origin}${toCanonicalPath(pathname)}`
+}
 
 /** Public indexable routes — keep in sync with App.jsx */
 export const PUBLIC_PATHS = [
@@ -123,10 +153,11 @@ const BREADCRUMB_LABELS = {
 }
 
 export function getSeoForPath(pathname) {
-  if (SEO_BY_PATH[pathname]) return SEO_BY_PATH[pathname]
+  const path = normalizePathname(pathname)
+  if (SEO_BY_PATH[path]) return SEO_BY_PATH[path]
 
-  if (pathname.startsWith('/blog/')) {
-    const post = getPostBySlug(pathname.slice('/blog/'.length))
+  if (path.startsWith('/blog/')) {
+    const post = getPostBySlug(path.slice('/blog/'.length))
     if (post) {
       return {
         title: `${post.title} | ${BRAND.name}`,
@@ -136,8 +167,8 @@ export function getSeoForPath(pathname) {
     }
   }
 
-  if (pathname.startsWith('/work/')) {
-    const work = getWorkSeo(pathname.slice('/work/'.length))
+  if (path.startsWith('/work/')) {
+    const work = getWorkSeo(path.slice('/work/'.length))
     if (work) {
       return {
         title: `${work.title} | ${BRAND.name}`,
@@ -153,17 +184,19 @@ export function getSeoForPath(pathname) {
 }
 
 export function isIndexablePath(pathname) {
-  if (Object.prototype.hasOwnProperty.call(SEO_BY_PATH, pathname)) return true
-  if (pathname.startsWith('/blog/') && getPostBySlug(pathname.slice('/blog/'.length))) return true
-  if (pathname.startsWith('/work/') && getWorkSeo(pathname.slice('/work/'.length))) return true
+  const path = normalizePathname(pathname)
+  if (Object.prototype.hasOwnProperty.call(SEO_BY_PATH, path)) return true
+  if (path.startsWith('/blog/') && getPostBySlug(path.slice('/blog/'.length))) return true
+  if (path.startsWith('/work/') && getWorkSeo(path.slice('/work/'.length))) return true
   return false
 }
 
 export function getBreadcrumbs(pathname) {
   const crumbs = [{ name: 'Home', path: '/' }]
-  if (pathname === '/') return crumbs
+  const normalized = normalizePathname(pathname)
+  if (normalized === '/') return crumbs
 
-  const parts = pathname.split('/').filter(Boolean)
+  const parts = normalized.split('/').filter(Boolean)
   let acc = ''
   parts.forEach((part) => {
     acc += `/${part}`

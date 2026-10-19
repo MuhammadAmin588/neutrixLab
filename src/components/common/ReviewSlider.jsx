@@ -64,6 +64,8 @@ export default function ReviewSlider({ reviews, autoPlay = true, interval = 5500
               <img
                 src={current.image}
                 alt={current.name}
+                loading="lazy"
+                decoding="async"
                 className="w-12 h-16 object-contain bg-[#05050a] border border-primary-container/40"
               />
               <div>
@@ -78,6 +80,8 @@ export default function ReviewSlider({ reviews, autoPlay = true, interval = 5500
               key={`img-${current.id}`}
               src={current.image}
               alt={current.name}
+              loading="lazy"
+              decoding="async"
               className="review-slide-image absolute inset-0 w-full h-full object-contain object-center"
             />
             <div className="review-slide-veil absolute inset-0 pointer-events-none" />

@@ -44,6 +44,8 @@ export default function WorkPage() {
         <img
           src={image}
           alt={alt}
+          fetchPriority="high"
+          decoding="async"
           className="w-full max-h-[420px] object-contain rounded-xl mb-xl bg-surface-container-lowest border border-outline-variant/20"
         />
         {featured ? (

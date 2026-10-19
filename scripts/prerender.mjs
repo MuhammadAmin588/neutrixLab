@@ -118,8 +118,12 @@ async function main() {
     await writeFile(outfile, html, 'utf8')
   }
 
+  const notFound = await prerender({ url: '/this-page-does-not-exist' })
+  const notFoundHtml = applyBody(applyHead(template, notFound.head), notFound.html)
+  await writeFile(path.join(distDir, '404.html'), notFoundHtml, 'utf8')
+
   await rm(ssrDir, { recursive: true, force: true })
-  console.log(`Prerendered ${routes.length} pages`)
+  console.log(`Prerendered ${routes.length} pages plus 404.html`)
 }
 
 main().catch((error) => {

@@ -34,7 +34,7 @@ function FeaturedChapter({ item, index }) {
       className={`pfolio-chapter ${odd ? 'is-odd' : ''} ${isInView ? 'is-visible' : ''}`}
     >
       <div className={fitClass(item, 'pfolio-chapter-media')} style={fitStyle(item)}>
-        <img src={item.image} alt={item.imageAlt} />
+        <img src={item.image} alt={item.imageAlt} loading="lazy" decoding="async" />
         <div className="pfolio-chapter-shade" />
         <span className="pfolio-chapter-index">{String(index + 1).padStart(2, '0')}</span>
       </div>
@@ -94,7 +94,7 @@ function ArchiveCardBody({ project }) {
   const inner = (
     <>
       <div className={fitClass(project, 'pfolio-card-media')} style={fitStyle(project)}>
-        <img src={project.image} alt={project.alt || project.title} />
+        <img src={project.image} alt={project.alt || project.title} loading="lazy" decoding="async" />
         <div className="pfolio-card-shade" />
         <span className="pfolio-card-view">
           Case study
@@ -161,6 +161,9 @@ export default function PortfolioPage() {
               key={c.id}
               src={c.image}
               alt=""
+              loading={i === spotlight ? 'eager' : 'lazy'}
+              fetchPriority={i === spotlight ? 'high' : 'low'}
+              decoding="async"
               className={fitClass(c, `pfolio-hero-bg-img ${i === spotlight ? 'is-active' : ''}`)}
               style={fitStyle(c)}
             />
@@ -214,7 +217,7 @@ export default function PortfolioPage() {
                   style={fitStyle(c)}
                   onClick={() => setSpotlight(i)}
                 >
-                  <img src={c.image} alt={c.title} />
+                  <img src={c.image} alt={c.title} loading="lazy" decoding="async" />
                   <span>{String(i + 1).padStart(2, '0')}</span>
                 </button>
               ))}

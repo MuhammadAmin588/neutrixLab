@@ -85,7 +85,7 @@ export function ServiceHero({
       style={{ '--spot-x': `${spot.x}%`, '--spot-y': `${spot.y}%` }}
     >
       <div className="absolute inset-0">
-        <img src={image} alt={imageAlt} className="hero-ken-burns absolute inset-0 w-full h-full object-cover" />
+        <img src={image} alt={imageAlt} fetchPriority="high" decoding="async" className="hero-ken-burns absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/88 to-background/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent" />
         <div className="absolute inset-0 home-hero-spotlight pointer-events-none" />
@@ -270,7 +270,7 @@ export function ServiceSplit({
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-xxl items-start">
         <div className="home-split-sticky">
           <div className="home-split-media">
-            <img src={image} alt={imageAlt} />
+            <img src={image} alt={imageAlt} loading="lazy" decoding="async" />
             <div className="home-split-media-glow" />
             {badgeText ? (
               <div className="home-split-badge">
@@ -404,7 +404,7 @@ export function ServiceBento({ eyebrow = 'SELECTED WORK', title, items, ctaTo = 
             className={`home-bento-main group${mainFit.className}`}
             style={mainFit.style}
           >
-            <img src={main.image} alt={main.title} />
+            <img src={main.image} alt={main.title} loading="lazy" decoding="async" />
             <div className="home-bento-shade" />
             <div className="home-bento-meta">
               <span className="font-label-caps text-label-caps text-primary-container tracking-[0.16em]">
@@ -426,7 +426,7 @@ export function ServiceBento({ eyebrow = 'SELECTED WORK', title, items, ctaTo = 
                   className={`home-bento-tile group${fit.className}`}
                   style={fit.style}
                 >
-                  <img src={item.image} alt={item.title} />
+                  <img src={item.image} alt={item.title} loading="lazy" decoding="async" />
                   <div className="home-bento-shade" />
                   <div className="home-bento-meta">
                     <span className="font-label-caps text-label-caps text-primary-container tracking-[0.16em]">
@@ -561,7 +561,7 @@ export function ServiceFinale({
 }) {
   return (
     <section className="home-finale relative min-h-[62vh] flex items-center overflow-hidden">
-      {image ? <img src={image} alt={imageAlt} className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg" /> : null}
+      {image ? <img src={image} alt={imageAlt} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover scale-105 home-finale-bg" /> : null}
       <div className="absolute inset-0 home-finale-veil" />
       <div className="absolute inset-0 home-finale-ring pointer-events-none" />
       <div className="relative z-10 w-full max-w-[860px] mx-auto px-margin-desktop text-center py-xxl">
@@ -601,7 +601,7 @@ export function ServiceCase({ label = 'CASE STUDY', title, description, image, m
     <section className="px-margin-desktop py-xxl">
       <div className="max-w-[1440px] mx-auto svc-case">
         <div className="svc-case-media">
-          <img src={image} alt={title} />
+          <img src={image} alt={title} loading="lazy" decoding="async" />
           <div className="svc-case-glow" />
         </div>
         <div className="svc-case-copy">

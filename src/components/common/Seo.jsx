@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { BRAND } from '../../constants/brand'
-import { getSeoForPath, isIndexablePath, SITE_ORIGIN } from '../../constants/seo'
+import { getSeoForPath, isIndexablePath, SITE_ORIGIN, toCanonicalUrl } from '../../constants/seo'
 import { buildSeoGraph } from '../../lib/seoSchema'
 
 function upsertMeta(selector, attributes) {
@@ -42,8 +42,7 @@ export default function Seo() {
   useEffect(() => {
     const { title, description, ogType = 'website' } = getSeoForPath(pathname)
     const origin = SITE_ORIGIN
-    const path = pathname === '/' ? '/' : pathname
-    const url = `${origin}${path}`
+    const url = toCanonicalUrl(pathname, origin)
     const image = `${origin}/og-share.png`
     const indexable = isIndexablePath(pathname)
 
@@ -53,10 +52,16 @@ export default function Seo() {
       name: 'robots',
       content: indexable ? 'index, follow' : 'noindex, follow',
     })
+    if (indexable) {
+      upsertLink('canonical', url)
+      upsertMeta('meta[property="og:url"]', { property: 'og:url', content: url })
+    } else {
+      document.head.querySelector('link[rel="canonical"]')?.remove()
+      document.head.querySelector('meta[property="og:url"]')?.remove()
+    }
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title })
     upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description })
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: ogType })
-    upsertMeta('meta[property="og:url"]', { property: 'og:url', content: url })
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: image })
     upsertMeta('meta[property="og:image:width"]', { property: 'og:image:width', content: '1200' })
     upsertMeta('meta[property="og:image:height"]', { property: 'og:image:height', content: '630' })
@@ -66,7 +71,6 @@ export default function Seo() {
     upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: title })
     upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description })
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: image })
-    upsertLink('canonical', url)
     upsertJsonLd(buildSeoGraph(pathname, origin))
   }, [pathname])
 
