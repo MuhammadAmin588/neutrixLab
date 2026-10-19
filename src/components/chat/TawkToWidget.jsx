@@ -46,10 +46,26 @@ export default function TawkToWidget() {
       showTawkWidget()
     }
 
+    window.Tawk_API.onStatusChange = function onTawkStatusChange(status) {
+      if (status === 'offline' && shouldKeepTawkOpen()) {
+        markHumanChatClosed()
+        hideTawkWidget()
+        window.dispatchEvent(new CustomEvent('NEUTRIX:tawk-offline'))
+      }
+    }
+
     window.Tawk_API.onLoad = function onTawkLoad() {
       try {
-        if (shouldKeepTawkOpen()) showTawkWidget()
-        else hideTawkWidget()
+        const offline = window.Tawk_API.getStatus?.() === 'offline'
+        if (offline && shouldKeepTawkOpen()) {
+          markHumanChatClosed()
+          hideTawkWidget()
+          window.dispatchEvent(new CustomEvent('NEUTRIX:tawk-offline'))
+        } else if (shouldKeepTawkOpen()) {
+          showTawkWidget()
+        } else {
+          hideTawkWidget()
+        }
         window.Tawk_API.addTags?.(['website', 'neutrix-lab'])
         window.Tawk_API.setAttributes?.(
           {

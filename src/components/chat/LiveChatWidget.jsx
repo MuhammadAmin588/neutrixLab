@@ -2,16 +2,21 @@ import { useEffect, useRef, useState } from 'react'
 import Icon from '../common/Icon'
 import { useLiveChat } from '../../context/LiveChatContext'
 import { generateAiReply, getWelcomeMessage, wantsHumanHandoff } from '../../lib/aiChat'
-import { isTawkConfigured, openTawkHumanChat } from '../../lib/tawk'
+import { getTawkStatus, isTawkConfigured, openTawkHumanChat } from '../../lib/tawk'
 import { BRAND } from '../../constants/brand'
 
 function uid(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
 
+const OFFLINE_HUMAN_TEXT =
+  "Our team isn't on live chat right now, so I can't open a human conversation. " +
+  `Email ${BRAND.email}, call ${BRAND.phones.map((p) => p.display).join(' / ')}, or send the Contact form and we'll get back to you.`
+
 function connectHuman(startHumanTakeover, prefill = '') {
   if (!isTawkConfigured()) {
     return {
+      opened: false,
       text:
         "I'd love to connect you with a human, but live agent chat isn't linked yet.\n\n" +
         `Meanwhile you can reach the team at ${BRAND.email} or ${BRAND.phones.map((p) => p.display).join(' / ')}, or use the Contact form.`,
@@ -19,16 +24,21 @@ function connectHuman(startHumanTakeover, prefill = '') {
     }
   }
 
+  if (getTawkStatus() === 'offline') {
+    return {
+      opened: false,
+      text: OFFLINE_HUMAN_TEXT,
+      quickReplies: ['Our services', 'Pricing'],
+    }
+  }
+
   startHumanTakeover()
   openTawkHumanChat(prefill || "Hi, I'd like to talk to a human at Neutrix Lab.")
-  return {
-    text: 'Connecting you to a human agent now. Our live chat is opening - a NEUTRIX team member will reply there.',
-    quickReplies: [],
-  }
+  return { opened: true }
 }
 
 export default function LiveChatWidget() {
-  const { open, closeChat, toggleChat, humanTakeover, startHumanTakeover } = useLiveChat()
+  const { open, closeChat, toggleChat, humanTakeover, humanOffline, startHumanTakeover } = useLiveChat()
   const [messages, setMessages] = useState(() => [getWelcomeMessage()])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -46,12 +56,46 @@ export default function LiveChatWidget() {
     listRef.current.scrollTop = listRef.current.scrollHeight
   }, [messages, typing, open])
 
+  function showAssistant(payload) {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: uid('ai'),
+        role: 'assistant',
+        text: payload.text,
+        quickReplies: payload.quickReplies,
+      },
+    ])
+  }
+
+  function handoffToHuman(prefill = '') {
+    const result = connectHuman(startHumanTakeover, prefill)
+    if (result.opened) return
+    showAssistant(result)
+  }
+
+  useEffect(() => {
+    if (!humanOffline) return
+    setMessages((prev) => {
+      if (prev.some((msg) => msg.id === 'ai-human-offline')) return prev
+      return [
+        ...prev,
+        {
+          id: 'ai-human-offline',
+          role: 'assistant',
+          text: OFFLINE_HUMAN_TEXT,
+          quickReplies: ['Our services', 'Pricing'],
+        },
+      ]
+    })
+  }, [humanOffline])
+
   async function sendText(raw) {
     const text = raw.trim()
     if (!text || typing || humanTakeover) return
 
     if (wantsHumanHandoff(text)) {
-      connectHuman(startHumanTakeover, text)
+      handoffToHuman(text)
       return
     }
 
@@ -62,17 +106,12 @@ export default function LiveChatWidget() {
 
     try {
       const reply = await generateAiReply(text, [...messages, userMsg])
-      const payload = reply.action === 'handoff_human' ? connectHuman(startHumanTakeover) : reply
+      if (reply.action === 'handoff_human') {
+        handoffToHuman()
+        return
+      }
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: uid('ai'),
-          role: 'assistant',
-          text: payload.text,
-          quickReplies: payload.quickReplies,
-        },
-      ])
+      showAssistant(reply)
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -118,7 +157,7 @@ export default function LiveChatWidget() {
             <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
-                onClick={() => connectHuman(startHumanTakeover)}
+                onClick={() => handoffToHuman()}
                 disabled={typing}
                 className="inline-flex items-center gap-1 rounded-lg border border-primary-container/40 px-2.5 py-1 text-[11px] font-label-caps tracking-wide text-primary-container hover:bg-primary-container/10 disabled:opacity-50"
                 title="Talk to a human"

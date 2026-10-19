@@ -26,6 +26,20 @@ function getApi() {
   return window.Tawk_API
 }
 
+export function getTawkStatus() {
+  try {
+    return String(getApi()?.getStatus?.() || '').toLowerCase()
+  } catch {
+    return ''
+  }
+}
+
+function notifyTawkOffline() {
+  pendingHumanChat = false
+  prefillMessage = ''
+  window.dispatchEvent(new CustomEvent('NEUTRIX:tawk-offline'))
+}
+
 function applyPrefill(api) {
   const message = String(prefillMessage || '').trim()
   if (!message || typeof api.setChatInputMessage !== 'function') return
@@ -38,7 +52,18 @@ function applyPrefill(api) {
 
 function revealNow() {
   const api = getApi()
-  if (!api) return false
+  if (!api || typeof api.maximize !== 'function') return false
+
+  if (api.getStatus?.() === 'offline') {
+    try {
+      api.minimize?.()
+      api.hideWidget?.()
+    } catch {
+      // ignore
+    }
+    notifyTawkOffline()
+    return true
+  }
 
   try {
     api.start?.({ showWidget: true })
@@ -54,7 +79,7 @@ function revealNow() {
   }
 
   applyPrefill(api)
-  return typeof api.maximize === 'function'
+  return true
 }
 
 export function showTawkWidget() {
@@ -79,6 +104,7 @@ export function hideTawkWidget() {
  */
 export function openTawkHumanChat(message = '') {
   if (!isTawkConfigured()) return false
+  if (getTawkStatus() === 'offline') return false
 
   pendingHumanChat = true
   prefillMessage = String(message || '').trim()
