@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Icon from '../common/Icon'
 import { useLiveChat } from '../../context/LiveChatContext'
-import { generateAiReply, getWelcomeMessage } from '../../lib/aiChat'
+import { generateAiReply, getWelcomeMessage, wantsHumanHandoff } from '../../lib/aiChat'
 import { isTawkConfigured, openTawkHumanChat } from '../../lib/tawk'
 import { BRAND } from '../../constants/brand'
 
@@ -9,21 +9,21 @@ function uid(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
 
-function connectHuman(startHumanTakeover) {
-  const opened = openTawkHumanChat()
-  if (opened) {
-    startHumanTakeover()
+function connectHuman(startHumanTakeover, prefill = '') {
+  if (!isTawkConfigured()) {
     return {
-      text: 'Connecting you to a human agent now. Our live chat is opening - a NEUTRIX team member will reply there.',
-      quickReplies: [],
+      text:
+        "I'd love to connect you with a human, but live agent chat isn't linked yet.\n\n" +
+        `Meanwhile you can reach the team at ${BRAND.email} or ${BRAND.phones.map((p) => p.display).join(' / ')}, or use the Contact form.`,
+      quickReplies: ['Our services', 'Pricing'],
     }
   }
 
+  startHumanTakeover()
+  openTawkHumanChat(prefill || "Hi, I'd like to talk to a human at Neutrix Lab.")
   return {
-    text:
-      "I'd love to connect you with a human, but live agent chat isn't linked yet.\n\n" +
-      `Meanwhile you can reach the team at ${BRAND.email} or ${BRAND.phones.map((p) => p.display).join(' / ')}, or use the Contact form.`,
-    quickReplies: ['Our services', 'Pricing'],
+    text: 'Connecting you to a human agent now. Our live chat is opening - a NEUTRIX team member will reply there.',
+    quickReplies: [],
   }
 }
 
@@ -49,6 +49,11 @@ export default function LiveChatWidget() {
   async function sendText(raw) {
     const text = raw.trim()
     if (!text || typing || humanTakeover) return
+
+    if (wantsHumanHandoff(text)) {
+      connectHuman(startHumanTakeover, text)
+      return
+    }
 
     const userMsg = { id: uid('user'), role: 'user', text }
     setMessages((prev) => [...prev, userMsg])
@@ -113,7 +118,7 @@ export default function LiveChatWidget() {
             <div className="flex items-center gap-1 shrink-0">
               <button
                 type="button"
-                onClick={() => sendText('Talk to a human')}
+                onClick={() => connectHuman(startHumanTakeover)}
                 disabled={typing}
                 className="inline-flex items-center gap-1 rounded-lg border border-primary-container/40 px-2.5 py-1 text-[11px] font-label-caps tracking-wide text-primary-container hover:bg-primary-container/10 disabled:opacity-50"
                 title="Talk to a human"

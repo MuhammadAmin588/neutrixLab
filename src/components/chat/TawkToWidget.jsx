@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { useLiveChat } from '../../context/LiveChatContext'
-import { getTawkIds, hideTawkWidget, isTawkConfigured, showTawkWidget } from '../../lib/tawk'
+import {
+  getTawkIds,
+  hideTawkWidget,
+  isHumanChatPending,
+  isTawkConfigured,
+  markHumanChatClosed,
+  showTawkWidget,
+} from '../../lib/tawk'
 
 const SCRIPT_ID = 'tawk-to-script'
 
@@ -26,6 +33,13 @@ export default function TawkToWidget() {
 
     window.Tawk_API = window.Tawk_API || {}
     window.Tawk_LoadStart = new Date()
+    window.Tawk_API.customStyle = {
+      zIndex: 2147483000,
+    }
+
+    function shouldKeepTawkOpen() {
+      return takeoverRef.current || isHumanChatPending()
+    }
 
     function revealHumanChat() {
       startRef.current()
@@ -34,7 +48,8 @@ export default function TawkToWidget() {
 
     window.Tawk_API.onLoad = function onTawkLoad() {
       try {
-        if (!takeoverRef.current) hideTawkWidget()
+        if (shouldKeepTawkOpen()) showTawkWidget()
+        else hideTawkWidget()
         window.Tawk_API.addTags?.(['website', 'neutrix-lab'])
         window.Tawk_API.setAttributes?.(
           {
@@ -61,12 +76,13 @@ export default function TawkToWidget() {
     }
 
     window.Tawk_API.onChatEnded = function onChatEnded() {
+      markHumanChatClosed()
       endRef.current()
       hideTawkWidget()
     }
 
     window.Tawk_API.onChatMinimized = function onTawkMinimized() {
-      if (takeoverRef.current) return
+      if (shouldKeepTawkOpen()) return
       hideTawkWidget()
     }
 
