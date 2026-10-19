@@ -26,20 +26,6 @@ function getApi() {
   return window.Tawk_API
 }
 
-export function getTawkStatus() {
-  try {
-    return String(getApi()?.getStatus?.() || '').toLowerCase()
-  } catch {
-    return ''
-  }
-}
-
-function notifyTawkOffline() {
-  pendingHumanChat = false
-  prefillMessage = ''
-  window.dispatchEvent(new CustomEvent('NEUTRIX:tawk-offline'))
-}
-
 function applyPrefill(api) {
   const message = String(prefillMessage || '').trim()
   if (!message || typeof api.setChatInputMessage !== 'function') return
@@ -53,17 +39,6 @@ function applyPrefill(api) {
 function revealNow() {
   const api = getApi()
   if (!api || typeof api.maximize !== 'function') return false
-
-  if (api.getStatus?.() === 'offline') {
-    try {
-      api.minimize?.()
-      api.hideWidget?.()
-    } catch {
-      // ignore
-    }
-    notifyTawkOffline()
-    return true
-  }
 
   try {
     api.start?.({ showWidget: true })
@@ -99,12 +74,11 @@ export function hideTawkWidget() {
 }
 
 /**
- * Open tawk.to for a live human agent.
- * Widget stays hidden until this is called (AI chat is the primary UI).
+ * Open tawk.to so the visitor can type a message to a human.
+ * Always opens the widget — do not block on Tawk's online/offline flag.
  */
 export function openTawkHumanChat(message = '') {
   if (!isTawkConfigured()) return false
-  if (getTawkStatus() === 'offline') return false
 
   pendingHumanChat = true
   prefillMessage = String(message || '').trim()

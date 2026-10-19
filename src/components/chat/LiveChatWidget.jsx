@@ -2,16 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import Icon from '../common/Icon'
 import { useLiveChat } from '../../context/LiveChatContext'
 import { generateAiReply, getWelcomeMessage, wantsHumanHandoff } from '../../lib/aiChat'
-import { getTawkStatus, isTawkConfigured, openTawkHumanChat } from '../../lib/tawk'
+import { isTawkConfigured, openTawkHumanChat } from '../../lib/tawk'
 import { BRAND } from '../../constants/brand'
 
 function uid(prefix) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
-
-const OFFLINE_HUMAN_TEXT =
-  "Our team isn't on live chat right now, so I can't open a human conversation. " +
-  `Email ${BRAND.email}, call ${BRAND.phones.map((p) => p.display).join(' / ')}, or send the Contact form and we'll get back to you.`
 
 function connectHuman(startHumanTakeover, prefill = '') {
   if (!isTawkConfigured()) {
@@ -24,21 +20,13 @@ function connectHuman(startHumanTakeover, prefill = '') {
     }
   }
 
-  if (getTawkStatus() === 'offline') {
-    return {
-      opened: false,
-      text: OFFLINE_HUMAN_TEXT,
-      quickReplies: ['Our services', 'Pricing'],
-    }
-  }
-
   startHumanTakeover()
   openTawkHumanChat(prefill || "Hi, I'd like to talk to a human at Neutrix Lab.")
   return { opened: true }
 }
 
 export default function LiveChatWidget() {
-  const { open, closeChat, toggleChat, humanTakeover, humanOffline, startHumanTakeover } = useLiveChat()
+  const { open, closeChat, toggleChat, humanTakeover, startHumanTakeover } = useLiveChat()
   const [messages, setMessages] = useState(() => [getWelcomeMessage()])
   const [input, setInput] = useState('')
   const [typing, setTyping] = useState(false)
@@ -73,22 +61,6 @@ export default function LiveChatWidget() {
     if (result.opened) return
     showAssistant(result)
   }
-
-  useEffect(() => {
-    if (!humanOffline) return
-    setMessages((prev) => {
-      if (prev.some((msg) => msg.id === 'ai-human-offline')) return prev
-      return [
-        ...prev,
-        {
-          id: 'ai-human-offline',
-          role: 'assistant',
-          text: OFFLINE_HUMAN_TEXT,
-          quickReplies: ['Our services', 'Pricing'],
-        },
-      ]
-    })
-  }, [humanOffline])
 
   async function sendText(raw) {
     const text = raw.trim()
