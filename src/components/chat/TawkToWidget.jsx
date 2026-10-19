@@ -51,6 +51,10 @@ export default function TawkToWidget() {
         markHumanChatClosed()
         hideTawkWidget()
         window.dispatchEvent(new CustomEvent('NEUTRIX:tawk-offline'))
+        return
+      }
+      if ((status === 'online' || status === 'away') && shouldKeepTawkOpen()) {
+        showTawkWidget()
       }
     }
 
@@ -80,6 +84,10 @@ export default function TawkToWidget() {
     }
 
     window.Tawk_API.onChatMessageAgent = function onChatMessageAgent() {
+      revealHumanChat()
+    }
+
+    window.Tawk_API.onAgentJoinChat = function onAgentJoinChat() {
       revealHumanChat()
     }
 
